@@ -1,0 +1,93 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class LevelController : MonoBehaviour
+{
+    private static LevelController _instance;
+
+    public static LevelController Instance {  get { return _instance; } }
+
+    [SerializeField]
+    private PawnChecker _pawnChecker;
+
+    [SerializeField]
+    private AwayTargetZone _awayTargetZone;
+
+    [SerializeField]
+    private AvoidTargetZone _avoidTargetZone;
+
+    [SerializeField]
+    private MagnetTargetZone _magnetTargetZone;
+
+    public Action OnTargetCompleted;
+
+    private int _availableZones = 0;
+
+    private int _completeZones;
+
+    private void Awake()
+    {
+        if(Instance == null)
+        {
+            _instance = this;
+        }
+        else if(Instance != this)
+        {
+            var buff = Instance;
+            _instance = this;
+            Destroy(buff.gameObject);
+           
+        }
+        DontDestroyOnLoad(Instance);
+
+        _pawnChecker = GameObject.Find("Pawns")?.GetComponent<PawnChecker>();
+        _awayTargetZone = GameObject.Find("Away target zone")?.GetComponent<AwayTargetZone>();
+        _avoidTargetZone = GameObject.Find("Avoid target zone")?.GetComponent<AvoidTargetZone>();
+        _magnetTargetZone = GameObject.Find("Magnet target zone")?.GetComponent<MagnetTargetZone>();
+    }
+
+    private void OnEnable()
+    {
+        if (_awayTargetZone != null)
+        {
+            _availableZones++;
+            _awayTargetZone.OnTargetZoneCompleted += OnZoneCompleted;
+        }
+        else if (_avoidTargetZone != null)
+        {
+            _availableZones++;
+            _avoidTargetZone.OnTargetZoneCompleted += OnZoneCompleted;
+        }
+        else if (_magnetTargetZone != null)
+        {
+            _availableZones++;
+            _magnetTargetZone.OnTargetZoneCompleted += OnZoneCompleted;
+        }
+    }
+
+    private void OnZoneCompleted()
+    {
+        Debug.Log($"{_completeZones} + {_availableZones}");
+        _completeZones++;
+        if(_completeZones == _availableZones)
+        {
+            Debug.Log($"Level completion");
+            OnTargetCompleted?.Invoke();
+            _completeZones = 0;
+        }
+    }
+
+    public void ReloadlLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void ReturnToMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+}

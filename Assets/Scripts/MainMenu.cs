@@ -9,4 +9,14 @@ public class MainMenu : MonoBehaviour
     {
         SceneManager.LoadScene(1);
     }
+
+    public void OnSoundChanged()
+    {
+        //SceneManager.LoadScene(1);
+    }
+
+    public void OnExit()
+    {
+        Application.Quit();
+    }
 }
