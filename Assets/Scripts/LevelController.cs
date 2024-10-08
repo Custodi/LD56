@@ -24,6 +24,8 @@ public class LevelController : MonoBehaviour
 
     public Action OnTargetCompleted;
 
+    public Action OnTargetUncompleted;
+
     private int _availableZones = 0;
 
     private int _completeZones;
@@ -55,30 +57,42 @@ public class LevelController : MonoBehaviour
         {
             _availableZones++;
             _awayTargetZone.OnTargetZoneCompleted += OnZoneCompleted;
+            _awayTargetZone.OnTargetZoneUncompleted += OnZoneUncompleted;
         }
-        else if (_avoidTargetZone != null)
+        if (_avoidTargetZone != null)
         {
             _availableZones++;
             _avoidTargetZone.OnTargetZoneCompleted += OnZoneCompleted;
+            _avoidTargetZone.OnTargetZoneUncompleted += OnZoneUncompleted;
         }
-        else if (_magnetTargetZone != null)
+        if (_magnetTargetZone != null)
         {
             _availableZones++;
             _magnetTargetZone.OnTargetZoneCompleted += OnZoneCompleted;
+            _magnetTargetZone.OnTargetZoneUncompleted += OnZoneUncompleted;
         }
+        Debug.Log($"AZ: {_availableZones}");
     }
 
     private void OnZoneCompleted()
     {
-        Debug.Log($"{_completeZones} + {_availableZones}");
+       
         _completeZones++;
-        if(_completeZones == _availableZones)
+        Debug.Log($"CZ:{_completeZones} + AZ:{_availableZones}");
+        if (_completeZones == _availableZones)
         {
             Debug.Log($"Level completion");
             OnTargetCompleted?.Invoke();
             _completeZones = 0;
         }
     }
+
+    private void OnZoneUncompleted()
+    {
+        _completeZones--;
+        Debug.Log($"CZ:{_completeZones} + AZ:{_availableZones}");
+    }
+
 
     public void ReloadlLevel()
     {

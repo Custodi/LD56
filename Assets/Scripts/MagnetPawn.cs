@@ -18,7 +18,7 @@ public class MagnetPawn : Pawn
     private Rigidbody2D _rb;
 
     [SerializeField]
-    private GameObject _particleSystem;
+    private ParticleSystem _particleSystem;
 
     // Start is called before the first frame update
     void Start()
@@ -44,7 +44,7 @@ public class MagnetPawn : Pawn
     public override void DestroyPawn()
     {
         StartCoroutine(PawnDestroying());
-        Destroy(gameObject);
+        
     }
 
     private void OnDestroy()
@@ -54,8 +54,10 @@ public class MagnetPawn : Pawn
 
     IEnumerator PawnDestroying()
     {
-        _particleSystem.SetActive(true);
-        yield return new WaitForSeconds(1.0f);
+        _particleSystem.GetComponent<ParticleSystem>().Play();
+        transform.DOScale(0f, 0.3f);
+        yield return new WaitForSeconds(0.3f);
+        Destroy(transform.gameObject);
     }
 
     private void OnDrawGizmos()

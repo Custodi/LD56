@@ -41,6 +41,9 @@ public class AvoidPawn : Pawn
         {
             if(pawnBuff is not AvoidPawn)
             {
+                collision.rigidbody.gravityScale = 0;
+                collision.rigidbody.velocity = Vector3.zero;
+                collision.rigidbody.angularVelocity = 0f;
                 pawnBuff.DestroyPawn();
             }
         }

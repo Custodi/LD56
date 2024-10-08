@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,9 @@ public class AwayPawn : Pawn
 
     [SerializeField]
     private Rigidbody2D _rb;
+
+    [SerializeField]
+    private ParticleSystem _particleSystem;
 
     // Start is called before the first frame update
     void Start()
@@ -37,13 +41,14 @@ public class AwayPawn : Pawn
     public override void DestroyPawn()
     {
         StartCoroutine(PawnDestroying());
-        Destroy(gameObject);
     }
 
     IEnumerator PawnDestroying()
     {
-        //_particleSystem.SetActive(true);
-        yield return new WaitForSeconds(1.0f);
+        _particleSystem.GetComponent<ParticleSystem>().Play();
+        transform.DOScale(0f, 0.3f);
+        yield return new WaitForSeconds(0.3f);
+        Destroy(transform.gameObject);
     }
 
     private void OnDestroy()

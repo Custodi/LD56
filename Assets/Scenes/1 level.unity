@@ -297,7 +297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a662f0d63a12034fb6844a57a26cf0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pawnChecker: {fileID: 0}
+  _pawnChecker: {fileID: 1097368799}
   _awayTargetZone: {fileID: 0}
   _avoidTargetZone: {fileID: 0}
   _magnetTargetZone: {fileID: 1398961373}

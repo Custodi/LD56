@@ -27,7 +27,7 @@ public class PawnChecker : MonoBehaviour
     {
         for(int i = 0; i < transform.childCount; i++)
         {
-            _pawns.Add(transform.GetChild(i).GetComponent<Pawn>());
+            _pawns.Add(transform.GetChild(i).GetComponentInChildren<Pawn>());
         }
 
         foreach(var pawn in _pawns)
